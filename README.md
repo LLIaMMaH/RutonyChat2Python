@@ -32,8 +32,8 @@
 ### **2. Установите зависимости**  
 Склонируйте репозиторий и установите зависимости:  
 ```sh
-git clone https://github.com/your-repo/minecraft-stream-handler.git
-cd minecraft-stream-handler
+git clone https://github.com/LLIaMMaH/RutonyChat2Redis.git
+cd RutonyChat2Redis
 pip install -r requirements.txt
 ```
 
