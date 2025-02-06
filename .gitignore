@@ -25,3 +25,6 @@ db.sqlote3
 *.flv
 *.mov
 *.wmv
+
+# Redis export
+redis_queue_output.txt
