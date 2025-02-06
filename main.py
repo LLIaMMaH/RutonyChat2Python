@@ -1,3 +1,4 @@
+from datetime import datetime
 import sys
 from utils.helper import format_tellraw, get_viewer_declension
 from utils.rcon import send_rcon_command
@@ -40,6 +41,10 @@ def handle_event(event, site, player_name, text=None, donate=None, currency=None
         message += "Наложение случайного эффекта!"
         message_tellraw = format_tellraw(event, site, player_name)
     elif event == "rnd_bag":
+        # TODO: Для отладки выставляем в текст дату, чтобы анализировать очередь в Redis
+        if text is None:
+            current_datetime = datetime.now()
+            text = current_datetime.strftime("%Y-%m-%d %H:%M:%S")
         message += "Выдача случайной сумочки!"
         message_tellraw = format_tellraw(event, site, player_name)
     elif event == "tellraw" and text:
