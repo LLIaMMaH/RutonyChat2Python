@@ -1,9 +1,8 @@
 import sys
-import json
-
 from utils.helper import format_tellraw, get_viewer_declension
 from utils.rcon import send_rcon_command
 from utils.redis import push_to_redis
+from utils.database import save_event_to_db
 from utils.logger import log_event
 
 
@@ -18,7 +17,7 @@ def parse_args(args):
 
 
 def handle_event(event, site, player_name, text=None, donate=None, currency=None, qty=None, command=None):
-    """Обрабатывает событие и записывает его в Redis."""
+    """Обрабатывает событие, отправляет в RCON, Redis и PostgreSQL."""
     if not event or not site or not player_name:
         log_event("Ошибка: отсутствуют обязательные параметры!", "error")
         return
@@ -27,10 +26,7 @@ def handle_event(event, site, player_name, text=None, donate=None, currency=None
 
     if event == "donate" and donate is not None and currency:
         message += f"Спасибо за донат {donate} {currency}!"
-        if text is not None:
-            message_tellraw = format_tellraw(event, site, player_name, text=text, donate=donate, currency=currency)
-        else:
-            message_tellraw = format_tellraw(event, site, player_name, donate=donate, currency=currency)
+        message_tellraw = format_tellraw(event, site, player_name, text=text, donate=donate, currency=currency)
     elif event == "raid" and qty is not None:
         message += f"Рейд от {player_name} с {qty} {get_viewer_declension(qty)}!"
         message_tellraw = format_tellraw(event, site, player_name, qty=qty)
@@ -56,18 +52,29 @@ def handle_event(event, site, player_name, text=None, donate=None, currency=None
     send_rcon_command(f'w LLIaMMaH {message}')
     send_rcon_command(message_tellraw)
 
-    redis_data = {
+    redis_status = push_to_redis({
         "site": site,
         "event": event,
         "user": player_name,
-        "from": player_name,
         "text": text,
         "donate": donate,
         "currency": currency,
         "qty": qty,
         "command": command
+    })
+
+    event_data = {
+        "site": site,
+        "event": event,
+        "user": player_name,
+        "text": text,
+        "donate": donate,
+        "currency": currency,
+        "qty": qty,
+        "redis": redis_status
     }
-    push_to_redis(redis_data)
+
+    save_event_to_db(event_data)
 
 
 if __name__ == "__main__":

@@ -24,6 +24,13 @@ REDIS_DB = int(get_env_variable("REDIS_DB", 0))
 REDIS_QUEUE = get_env_variable("REDIS_QUEUE", "minecraft_queue")
 REDIS_PROCESSING_QUEUE = get_env_variable("REDIS_PROCESSING_QUEUE", "minecraft_queue_processing")
 
+# Настройки PostgreSQL
+PG_HOST = get_env_variable("PG_HOST", "localhost")
+PG_PORT = get_env_variable("PG_PORT", "5432")
+PG_DATABASE = get_env_variable("PG_DATABASE", "minecraft_events")
+PG_USER = get_env_variable("PG_USER", "postgres")
+PG_PASSWORD = get_env_variable("PG_PASSWORD", "yourpassword")
+
 # Настройки логирования
 LOG_FILE = get_env_variable("LOG_FILE", "script.log")
 LOG_LEVEL = get_env_variable("LOG_LEVEL", "INFO")

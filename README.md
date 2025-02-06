@@ -40,5 +40,21 @@ cd RutonyChat2Redis
 pip install -r requirements.txt
 ```
 
+### **3. PostgreSQL**
+Создать базу данных. Создать таблицу.
+```sql
+CREATE TABLE events (
+    id SERIAL PRIMARY KEY,
+    event_type TEXT NOT NULL,
+    site TEXT NOT NULL,
+    player_name TEXT NOT NULL,
+    text TEXT,
+    donate NUMERIC,
+    currency TEXT,
+    qty INT,
+    redis BOOLEAN NOT NULL,
+    timestamp TIMESTAMP DEFAULT NOW()
+);
+```
 
 **PS:** Поскольку скрипт просто вызывается, то необходимо установить нужные зависимости в глобальное хранилище.
