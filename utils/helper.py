@@ -1,17 +1,3 @@
-# def get_viewer_declension(qty):
-#     """Определяет правильное склонение слова 'зритель'."""
-#     qty = int(qty)
-#     if 11 <= qty % 100 <= 19:
-#         return "зрителей"
-#     last_digit = qty % 10
-#     if last_digit == 1:
-#         return "зритель"
-#     elif 2 <= last_digit <= 4:
-#         return "зрителя"
-#     else:
-#         return "зрителей"
-
-
 def get_viewer_declension(qty):
     """
     Возвращает правильное склонение слова 'зритель' в зависимости от числа.
