@@ -27,57 +27,69 @@ def format_tellraw(event, site, viewer_name, text=None, donate=None, currency=No
     base = [
         "", {"text": "["}, {"text": site, "color": "yellow"}, {"text": "] "}
     ]
-    # Стандаортные события на стриме
-    if event == "raid":
+
+    if event == "donate":
+        base.extend([
+            {"text": viewer_name, "color": "aqua"},
+            {"text": " только что задонатил "}, {"text": str(donate), "color": "gold"},
+            {"text": f" {currency}!"}
+        ])
+
+        if text is not None:
+            base.extend([
+                {"text": " А вот, что он написал: "}, {"text": text, "color": "gold"}
+            ])
+    elif event == "music":
+        base.extend([
+            {"text": viewer_name, "color": "aqua"}, {"text": " заказал музыку."}
+        ])
+    elif event == "new_follower":
+        base.extend([
+            {"text": viewer_name, "color": "aqua"}, {"text": " теперь отслеживает."}
+        ])
+    elif event == "new_viewer":
+        base.extend([
+            {"text": "Новый зритель "}, {"text": viewer_name, "color": "aqua"},
+            {"text": "."}
+        ])
+    elif event == "raid":
         viewers = get_viewer_declension(qty)
         base.extend([
             {"text": "Рейд от "}, {"text": viewer_name, "color": "aqua"},
             {"text": "! С ним приходит "}, {"text": str(qty), "color": "gold"},
             {"text": f" {viewers}."}
         ])
-    elif event == "donate":
+    elif event == "skip_music":
         base.extend([
-            {"text": viewer_name, "color": "aqua"},
-            {"text": " только что задонатил "}, {"text": str(donate), "color": "gold"},
-            {"text": f" {currency}!"}
+            {"text": viewer_name, "color": "aqua"}, {"text": " скипнул трек с плейлисте."}
         ])
-        if text is not None:
-            base.extend([
-                {"text": " А вот, что он написал: "}, {"text": text, "color": "gold"}
-            ])
-    elif event == "new_viewer":
+    elif event == "stream_message":
         base.extend([
-            {"text": "Новый зритель "}, {"text": viewer_name, "color": "aqua"},
-            {"text": "."}
+            {"text": viewer_name, "color": "aqua"}, {"text": ": ", "color": "yellow"}, {"text": text}
         ])
-    elif event == "new_follower":
+    elif event == "tellraw":
         base.extend([
-            {"text": viewer_name, "color": "aqua"}, {"text": " теперь отслеживает."}
+            {"text": text}
         ])
-    # Далее идут шалости
-    elif event == "rnd_effect":
+    elif event == "command":
         base.extend([
-            {"text": viewer_name, "color": "aqua"}, {"text": " накладывает случайный эффект."}
+            {"text": viewer_name, "color": "aqua"}, {"text": " выполняет команду "}, {"text": text, "color": "yellow"}
         ])
     elif event == "rnd_bag":
         base.extend([
             {"text": viewer_name, "color": "aqua"}, {"text": " дарит случайную сумочку."}
         ])
-    elif event == "music":
+    elif event == "rnd_effect":
         base.extend([
-            {"text": viewer_name, "color": "aqua"}, {"text": " заказал музыку."}
+            {"text": viewer_name, "color": "aqua"}, {"text": " накладывает случайный эффект."}
         ])
-    elif event == "skip_music":
+    elif event == "rnd_fluid":
         base.extend([
-            {"text": viewer_name, "color": "aqua"}, {"text": " скипнул трек с плейлисте."}
+            {"text": viewer_name, "color": "aqua"}, {"text": " заливает случайной жидкостью."}
         ])
-    elif event == "new_message":
+    elif event == "rnd_schematic":
         base.extend([
-            {"text": viewer_name, "color": "aqua"}, {"text": ": ", "color": "yellow"}, {"text": text}
-        ])
-    elif event == "command":
-        base.extend([
-            {"text": viewer_name, "color": "aqua"}, {"text": " хочет выполнить команду - "}, {"text": text, "color": "yellow"}
+            {"text": viewer_name, "color": "aqua"}, {"text": " замуровывает в случайную схематику."}
         ])
     else:
         return None  # Если событие неизвестное, возвращаем None
