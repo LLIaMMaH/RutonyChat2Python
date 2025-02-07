@@ -11,13 +11,13 @@ def get_viewer_declension(qty):
     return titles[2 if 11 <= qty % 100 <= 19 else cases[5 if qty % 10 >= 5 else qty % 10]]
 
 
-def format_tellraw(event, site, player_name, text=None, donate=None, currency=None, qty=None):
+def format_tellraw(event, site, viewer_name, text=None, donate=None, currency=None, qty=None):
     """
     Формирует команду `tellraw` для RCON в зависимости от типа события.
 
     :param event: Тип события (raid, donate, new_viewer, new_follower).
     :param site: Платформа (Twitch, Trovo и т. д.).
-    :param player_name: Имя игрока.
+    :param viewer_name: Имя игрока.
     :param text: Дополнительный текст.
     :param donate: Сумма доната.
     :param currency: Валюта доната.
@@ -31,13 +31,13 @@ def format_tellraw(event, site, player_name, text=None, donate=None, currency=No
     if event == "raid":
         viewers = get_viewer_declension(qty)
         base.extend([
-            {"text": "Рейд от "}, {"text": player_name, "color": "aqua"},
+            {"text": "Рейд от "}, {"text": viewer_name, "color": "aqua"},
             {"text": "! С ним приходит "}, {"text": str(qty), "color": "gold"},
             {"text": f" {viewers}."}
         ])
     elif event == "donate":
         base.extend([
-            {"text": player_name, "color": "aqua"},
+            {"text": viewer_name, "color": "aqua"},
             {"text": " только что задонатил "}, {"text": str(donate), "color": "gold"},
             {"text": f" {currency}!"}
         ])
@@ -47,21 +47,33 @@ def format_tellraw(event, site, player_name, text=None, donate=None, currency=No
             ])
     elif event == "new_viewer":
         base.extend([
-            {"text": "Новый зритель "}, {"text": player_name, "color": "aqua"},
+            {"text": "Новый зритель "}, {"text": viewer_name, "color": "aqua"},
             {"text": "."}
         ])
     elif event == "new_follower":
         base.extend([
-            {"text": player_name, "color": "aqua"}, {"text": " теперь отслеживает."}
+            {"text": viewer_name, "color": "aqua"}, {"text": " теперь отслеживает."}
         ])
     # Далее идут шалости
     elif event == "rnd_effect":
         base.extend([
-            {"text": player_name, "color": "aqua"}, {"text": " накладывает случайный эффект."}
+            {"text": viewer_name, "color": "aqua"}, {"text": " накладывает случайный эффект."}
         ])
     elif event == "rnd_bag":
         base.extend([
-            {"text": player_name, "color": "aqua"}, {"text": " дарит случайную сумочку."}
+            {"text": viewer_name, "color": "aqua"}, {"text": " дарит случайную сумочку."}
+        ])
+    elif event == "music":
+        base.extend([
+            {"text": viewer_name, "color": "aqua"}, {"text": " заказал музыку."}
+        ])
+    elif event == "skip_music":
+        base.extend([
+            {"text": viewer_name, "color": "aqua"}, {"text": " скипнул трек с плейлисте."}
+        ])
+    elif event == "new_message":
+        base.extend([
+            {"text": viewer_name, "color": "aqua"}, {"text": ": ", "color": "yellow"}, {"text": text}
         ])
     else:
         return None  # Если событие неизвестное, возвращаем None
