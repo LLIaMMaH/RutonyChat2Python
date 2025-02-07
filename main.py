@@ -117,17 +117,18 @@ def handle_event(event, site, viewer_name, text=None, donate=None, currency=None
     # Проверяем, куда записывать событие
     storage_rule = EVENT_STORAGE_RULES.get(event, "both")
 
+    redis_data = push_to_redis({
+        "site": site,
+        "event": event,
+        "user": viewer_name,
+        "text": text,
+        "donate": donate,
+        "currency": currency,
+        "qty": qty,
+        "command": command
+    })
+
     if storage_rule in ["redis", "both"]:
-        redis_data = push_to_redis({
-            "site": site,
-            "event": event,
-            "user": viewer_name,
-            "text": text,
-            "donate": donate,
-            "currency": currency,
-            "qty": qty,
-            "command": command
-        })
         redis_status = push_to_redis(redis_data)
     else:
         # redis_status = False if storage_rule == "postgres" else None
