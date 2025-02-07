@@ -22,10 +22,15 @@ EVENT_STORAGE_RULES = {
 
     # Записываем в оба места
     # "command": "redis",
+    # "launch": "redis",
+    # "mob": "redis",
+    # "moobs": "redis",
+    # "mooobs": "redis",
     # "rnd_bag": "redis",
     # "rnd_effect": "redis",
     # "rnd_fluid": "redis",
     # "rnd_schematic": "redis",
+    # "rtp": "redis",
 }
 
 
@@ -86,6 +91,22 @@ def handle_event(event, site, viewer_name, text=None, donate=None, currency=None
             message_tellraw = format_tellraw(event, site, viewer_name, text=text)
             send_rcon_command(text)
 
+    # Подкинуть стримера на случайное число блоков вверх
+    elif event == "launch":
+        message_tellraw = format_tellraw(event, site, viewer_name)
+
+    # Заспавнить рядом со стримером случайного моба
+    elif event == "mob":
+        message_tellraw = format_tellraw(event, site, viewer_name)
+
+    # Заспавнить рядом со стримером случайных мобов (от 1 до 5)
+    elif event == "moobs":
+        message_tellraw = format_tellraw(event, site, viewer_name)
+
+    # Заспавнить рядом со стримером случайных мобов (от 5 до 20)
+    elif event == "mooobs":
+        message_tellraw = format_tellraw(event, site, viewer_name)
+
     # Выдача случайной сумочки
     elif event == "rnd_bag":
         # TODO: Для отладки выставляем в текст дату, чтобы анализировать очередь в Redis
@@ -104,6 +125,10 @@ def handle_event(event, site, viewer_name, text=None, donate=None, currency=None
 
     # Замуровать стримера в случайную схематику
     elif event == "rnd_schematic":
+        message_tellraw = format_tellraw(event, site, viewer_name)
+
+    # Телепортируем стримера в случайные координаты
+    elif event == "rtp":
         message_tellraw = format_tellraw(event, site, viewer_name)
 
     # Не известное событие

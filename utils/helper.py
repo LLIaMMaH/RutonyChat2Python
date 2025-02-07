@@ -75,6 +75,22 @@ def format_tellraw(event, site, viewer_name, text=None, donate=None, currency=No
         base.extend([
             {"text": viewer_name, "color": "aqua"}, {"text": " выполняет команду "}, {"text": text, "color": "yellow"}
         ])
+    elif event == "launch":
+        base.extend([
+            {"text": viewer_name, "color": "aqua"}, {"text": " подкидывает на случайное число блоков. "}
+        ])
+    elif event == "mob":
+        base.extend([
+            {"text": viewer_name, "color": "aqua"}, {"text": " призывает случайного моба. "}
+        ])
+    elif event == "moobs":
+        base.extend([
+            {"text": viewer_name, "color": "aqua"}, {"text": " призывает несколько случайных мобов. "}
+        ])
+    elif event == "mooobs":
+        base.extend([
+            {"text": viewer_name, "color": "aqua"}, {"text": " призывает много случайных мобов. "}
+        ])
     elif event == "rnd_bag":
         base.extend([
             {"text": viewer_name, "color": "aqua"}, {"text": " дарит случайную сумочку."}
@@ -90,6 +106,10 @@ def format_tellraw(event, site, viewer_name, text=None, donate=None, currency=No
     elif event == "rnd_schematic":
         base.extend([
             {"text": viewer_name, "color": "aqua"}, {"text": " замуровывает в случайную схематику."}
+        ])
+    elif event == "rtp":
+        base.extend([
+            {"text": viewer_name, "color": "aqua"}, {"text": " закидывает в случайные координаты."}
         ])
     else:
         return None  # Если событие неизвестное, возвращаем None
