@@ -36,13 +36,17 @@
 ### **2. Установите зависимости**  
 Склонируйте репозиторий и установите зависимости:  
 ```sh
-git clone https://github.com/LLIaMMaH/RutonyChat2Redis.git
-cd RutonyChat2Redis
+git clone https://github.com/LLIaMMaH/RutonyChat2Python.git
+cd RutonyChat2Python
 pip install -r requirements.txt
 ```
 
 ### **3. PostgreSQL**
-Создать базу данных. Создать таблицу.
+Создать базу данных.  
+<pre>
+<details>
+  <summary>Создать таблицу.</summary>
+
 ```sql
 CREATE TABLE events (
     id SERIAL PRIMARY KEY,
@@ -57,6 +61,9 @@ CREATE TABLE events (
     timestamp TIMESTAMP DEFAULT NOW()
 );
 ```
+</details>
+</pre>
+
 
 **PS:** Поскольку скрипт просто вызывается, то необходимо установить нужные зависимости в глобальное хранилище.
 
