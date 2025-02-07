@@ -43,7 +43,6 @@ pip install -r requirements.txt
 
 ### **3. PostgreSQL**
 Создать базу данных.  
-<pre>
 <details>
   <summary>Создать таблицу.</summary>
 
@@ -62,7 +61,7 @@ CREATE TABLE events (
 );
 ```
 </details>
-</pre>
+
 
 
 **PS:** Поскольку скрипт просто вызывается, то необходимо установить нужные зависимости в глобальное хранилище.
