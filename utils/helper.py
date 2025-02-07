@@ -75,6 +75,10 @@ def format_tellraw(event, site, viewer_name, text=None, donate=None, currency=No
         base.extend([
             {"text": viewer_name, "color": "aqua"}, {"text": ": ", "color": "yellow"}, {"text": text}
         ])
+    elif event == "command":
+        base.extend([
+            {"text": viewer_name, "color": "aqua"}, {"text": " хочет выполнить команду - "}, {"text": text, "color": "yellow"}
+        ])
     else:
         return None  # Если событие неизвестное, возвращаем None
 
