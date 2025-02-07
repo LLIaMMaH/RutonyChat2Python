@@ -15,7 +15,7 @@
 Когда серверный мод заберёт запись из очереди он её отработает и она пропадёт. Запись информации в базу данных [PostgreSQL][PostgreSQL] позволит в дальнейшем анализировать какие события происходит в какой период. Какие события инициируют зрители. Какую музыку заказывают зрители. Ну и так далее. Дополнительно сохраняется информация, смогла ли записаться информация о событии в очередь [Redis][Redis].
 
 
-## References
+[//]: # (Short links)
 [RutonyChat]: https://store.steampowered.com/app/524660/RutonyChat/ "Rutony Chat"
 [Redis]: https://redis.io/ "Redis"
 [CS-Script]: https://www.cs-script.net/ "ECMA-compliant C# based scripting platform"
