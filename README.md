@@ -16,8 +16,8 @@
 ### **Поддерживаемые параметры**
 | Параметр      | Тип   | Обязателен | Описание                                                      |
 |---------------|---| --- |---------------------------------------------------------------|
-| `event`       | str | ✅ | Тип события: `donate`, `raid`, `new_viewer`, `tellraw`, `...` |
 | `site`        | str | ✅ | Платформа: `Twitch`, `Trovo`, `VKPlay`, `GoodGame`, `...`     |
+| `event`       | str | ✅ | Тип события: `donate`, `raid`, `new_viewer`, `tellraw`, `...` |
 | `viewer_name` | str | ✅ | Ник зрителя на стриминговой платформе                         |
 | `text`        | str | ❌ | Текст сообщения                                               |
 | `donate`      | float | ❌ | Сумма доната                                                  |
@@ -49,9 +49,10 @@ pip install -r requirements.txt
 ```sql
 CREATE TABLE events (
     id SERIAL PRIMARY KEY,
-    event_type TEXT NOT NULL,
     site TEXT NOT NULL,
+    event_type TEXT NOT NULL,
     viewer_name TEXT NOT NULL,
+    user_name TEXT NOT NULL,
     text TEXT,
     donate NUMERIC,
     currency TEXT,
@@ -62,6 +63,21 @@ CREATE TABLE events (
 ```
 </details>
 
+
+### 4. Очередь Redis  
+```json
+{
+    "site": site,
+    "event": event,
+    "from": viewer_name,
+    "user": user_name,
+    "text": text,
+    "donate": donate,
+    "currency": currency,
+    "qty": qty,
+    "command": command
+}
+```
 
 ---
 **PS:** Поскольку скрипт просто вызывается, то необходимо установить нужные зависимости в глобальное хранилище.

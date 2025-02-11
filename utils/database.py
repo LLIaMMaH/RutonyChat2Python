@@ -28,12 +28,13 @@ def save_event_to_db(event_data):
     try:
         with conn.cursor() as cur:
             sql = """
-                INSERT INTO events (event_type, site, viewer_name, text, donate, currency, qty, redis, timestamp)
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, NOW())
+                INSERT INTO events (site, event_type, viewer_name, user_name, text, donate, currency, qty, redis, timestamp)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, NOW())
             """
             cur.execute(sql, (
-                event_data["event"],
                 event_data["site"],
+                event_data["event"],
+                event_data["from"],
                 event_data["user"],
                 event_data["text"],
                 event_data["donate"],

@@ -11,19 +11,24 @@ def get_viewer_declension(qty):
     return titles[2 if 11 <= qty % 100 <= 19 else cases[5 if qty % 10 >= 5 else qty % 10]]
 
 
-def format_tellraw(event, site, viewer_name, text=None, donate=None, currency=None, qty=None):
+def format_tellraw(site, event, viewer_name, user_name=None, text=None, donate=None, currency=None, qty=None):
     """
     Формирует команду `tellraw` для RCON в зависимости от типа события.
 
-    :param event: Тип события (raid, donate, new_viewer, new_follower).
     :param site: Платформа (Twitch, Trovo и т. д.).
-    :param viewer_name: Имя игрока.
+    :param event: Тип события (raid, donate, new_viewer, new_follower).
+    :param viewer_name: Имя зрителя.
+    :param user_name: Имя игрока.
     :param text: Дополнительный текст.
     :param donate: Сумма доната.
     :param currency: Валюта доната.
     :param qty: Количество зрителей (для рейда).
     :return: Строка команды tellraw.
     """
+
+    if site is None:
+        site='RC2P'
+
     base = [
         "", {"text": "["}, {"text": site, "color": "yellow"}, {"text": "] "}
     ]
@@ -112,6 +117,8 @@ def format_tellraw(event, site, viewer_name, text=None, donate=None, currency=No
             {"text": viewer_name, "color": "aqua"}, {"text": " закидывает в случайные координаты."}
         ])
     else:
-        return None  # Если событие неизвестное, возвращаем None
+        base.extend([
+            {"text": " Что-то пошло не так."}
+        ])
 
     return f'tellraw LLIaMMaH {base}'

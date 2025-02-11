@@ -44,9 +44,9 @@ def parse_args(args):
     return params
 
 
-def handle_event(event, site, viewer_name, text=None, donate=None, currency=None, qty=None, command=None):
+def handle_event(site, event, viewer_name, user_name=None, text=None, donate=None, currency=None, qty=None, command=None):
     """Обрабатывает событие, отправляет в RCON, Redis и PostgreSQL."""
-    if not event or not site or not viewer_name:
+    if not site or not event or not viewer_name:
         log_event("Ошибка: отсутствуют обязательные параметры!", "error")
         return
 
@@ -54,58 +54,58 @@ def handle_event(event, site, viewer_name, text=None, donate=None, currency=None
 
     # Донат
     if event == "donate" and donate is not None and currency:
-        message_tellraw = format_tellraw(event, site, viewer_name, text=text, donate=donate, currency=currency)
+        message_tellraw = format_tellraw(site, event, viewer_name, text=text, donate=donate, currency=currency)
 
     # Заказ музыки
     elif event == "music":
-        message_tellraw = format_tellraw(event, site, viewer_name)
+        message_tellraw = format_tellraw(site, event, viewer_name)
 
     # Новый подписчик присоединился
     elif event == "new_follower":
-        message_tellraw = format_tellraw(event, site, viewer_name)
+        message_tellraw = format_tellraw(site, event, viewer_name)
 
     # Новый зритель присоединился
     elif event == "new_viewer":
-        message_tellraw = format_tellraw(event, site, viewer_name)
+        message_tellraw = format_tellraw(site, event, viewer_name)
 
     # Рейд от стримера
     elif event == "raid" and qty is not None:
-        message_tellraw = format_tellraw(event, site, viewer_name, qty=qty)
+        message_tellraw = format_tellraw(site, event, viewer_name, qty=qty)
 
-    # Пропуск трека из списка
+    # Пропуск трека из списка заказов
     elif event == "skip_music":
-        message_tellraw = format_tellraw(event, site, viewer_name)
+        message_tellraw = format_tellraw(site, event, viewer_name)
 
     # Новое сообщение в чате
     elif event == "stream_message":
-        message_tellraw = format_tellraw(event, site, viewer_name, text=text)
+        message_tellraw = format_tellraw(site, event, viewer_name, text=text)
 
     # Отправить в игру сообщение в формате tellraw
     elif event == "tellraw" and text:
-        message_tellraw = format_tellraw(event, site, viewer_name, text=text)
+        message_tellraw = format_tellraw(site, event, viewer_name, text=text)
 
     # Выполнить команду
     elif event == "command":
         if text is not None:
             # TODO: Проверка, что у нас команда, которую мы знаем.
-            message_tellraw = format_tellraw(event, site, viewer_name, text=text)
+            message_tellraw = format_tellraw(site, event, viewer_name, text=text)
             send_rcon_command(text)
 
     # Подкинуть стримера на случайное число блоков вверх
     elif event == "launch":
-        message_tellraw = format_tellraw(event, site, viewer_name)
+        message_tellraw = format_tellraw(site, event, viewer_name)
 
     # Заспавнить рядом со стримером случайного моба
     elif event == "mob":
-        message_tellraw = format_tellraw(event, site, viewer_name)
+        message_tellraw = format_tellraw(site, event, viewer_name)
 
     # Заспавнить рядом со стримером случайных мобов (от 1 до 5)
     elif event == "moobs":
-        message_tellraw = format_tellraw(event, site, viewer_name)
+        message_tellraw = format_tellraw(site, event, viewer_name)
 
     # Заспавнить рядом со стримером случайных мобов (от 5 до 20)
     elif event == "mooobs":
-        message_tellraw = format_tellraw(event, site, viewer_name)
+        message_tellraw = format_tellraw(site, event, viewer_name)
 
     # Выдача случайной сумочки
     elif event == "rnd_bag":
@@ -113,23 +113,23 @@ def handle_event(event, site, viewer_name, text=None, donate=None, currency=None
         if text is None:
             current_datetime = datetime.now()
             text = current_datetime.strftime("%Y-%m-%d %H:%M:%S")
-        message_tellraw = format_tellraw(event, site, viewer_name)
+        message_tellraw = format_tellraw(site, event, viewer_name)
 
     # Наложение случайного эффекта
     elif event == "rnd_effect":
-        message_tellraw = format_tellraw(event, site, viewer_name)
+        message_tellraw = format_tellraw(site, event, viewer_name)
 
     # Разлить вокруг стримера случайную жидкость
     elif event == "rnd_fluid":
-        message_tellraw = format_tellraw(event, site, viewer_name)
+        message_tellraw = format_tellraw(site, event, viewer_name)
 
     # Замуровать стримера в случайную схематику
     elif event == "rnd_schematic":
-        message_tellraw = format_tellraw(event, site, viewer_name)
+        message_tellraw = format_tellraw(site, event, viewer_name)
 
     # Телепортируем стримера в случайные координаты
     elif event == "rtp":
-        message_tellraw = format_tellraw(event, site, viewer_name)
+        message_tellraw = format_tellraw(site, event, viewer_name)
 
     # Не известное событие
     else:
@@ -145,7 +145,8 @@ def handle_event(event, site, viewer_name, text=None, donate=None, currency=None
     redis_data = push_to_redis({
         "site": site,
         "event": event,
-        "user": viewer_name,
+        "from": viewer_name,
+        "user": user_name,
         "text": text,
         "donate": donate,
         "currency": currency,
@@ -166,14 +167,15 @@ def handle_event(event, site, viewer_name, text=None, donate=None, currency=None
 
 if __name__ == "__main__":
     if len(sys.argv) < 4:
-        log_event("Ошибка: недостаточно аргументов! Требуются event, site, viewer_name.", "error")
+        log_event("Ошибка: недостаточно аргументов! Требуются site, event, viewer_name.", "error")
         sys.exit(1)
 
     params = parse_args(sys.argv[1:])
 
-    event = params.get("event")
     site = params.get("site")
+    event = params.get("event")
     viewer_name = params.get("viewer_name")
+    user_name = params.get("user_name")
     text = params.get("text")
     donate = float(params.get("donate")) if "donate" in params else None
     currency = params.get("currency")
@@ -181,4 +183,4 @@ if __name__ == "__main__":
     command = params.get("command")
 
     log_event(f"Скрипт запущен с параметрами: {params}")
-    handle_event(event, site, viewer_name, text, donate, currency, qty, command)
+    handle_event(site, event, viewer_name, user_name, text, donate, currency, qty, command)
