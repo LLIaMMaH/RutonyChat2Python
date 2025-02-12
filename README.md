@@ -19,6 +19,7 @@
 | `site`        | str | ✅ | Платформа: `Twitch`, `Trovo`, `VKPlay`, `GoodGame`, `...`     |
 | `event`       | str | ✅ | Тип события: `donate`, `raid`, `new_viewer`, `tellraw`, `...` |
 | `viewer_name` | str | ✅ | Ник зрителя на стриминговой платформе                         |
+| `user_name`   | str | ✅ | Ник игрока                                                    |
 | `text`        | str | ❌ | Текст сообщения                                               |
 | `donate`      | float | ❌ | Сумма доната                                                  |
 | `currency`    | str | ❌ | Валюта доната                                                 |
@@ -52,7 +53,7 @@ CREATE TABLE events (
     site TEXT NOT NULL,
     event_type TEXT NOT NULL,
     viewer_name TEXT NOT NULL,
-    user_name TEXT NOT NULL,
+    user_name TEXT,
     text TEXT,
     donate NUMERIC,
     currency TEXT,
@@ -69,8 +70,8 @@ CREATE TABLE events (
 {
     "site": site,
     "event": event,
-    "from": viewer_name,
-    "user": user_name,
+    "viewer_name": viewer_name,
+    "user_name": user_name,
     "text": text,
     "donate": donate,
     "currency": currency,
